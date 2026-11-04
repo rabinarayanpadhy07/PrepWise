@@ -35,6 +35,15 @@ SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="")
 DEBUG = env.bool("DJANGO_DEBUG", default=False)
 ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS")
 
+# Render platform support: automatically allow the service's external hostname and .onrender.com domain
+RENDER_EXTERNAL_HOSTNAME = env.str("RENDER_EXTERNAL_HOSTNAME", default="")
+if RENDER_EXTERNAL_HOSTNAME and RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+if env.bool("RENDER", default=False) or RENDER_EXTERNAL_HOSTNAME:
+    if ".onrender.com" not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(".onrender.com")
+
 INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -180,6 +189,13 @@ CORS_URLS_REGEX = r"^/api/.*$"
 # Content-Disposition lets the app save invoices and reports under their own names.
 CORS_EXPOSE_HEADERS = ["X-Request-ID", "Content-Disposition"]
 CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
+if RENDER_EXTERNAL_HOSTNAME:
+    _render_origin = f"https://{RENDER_EXTERNAL_HOSTNAME}"
+    if _render_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(_render_origin)
+if env.bool("RENDER", default=False) or RENDER_EXTERNAL_HOSTNAME:
+    if "https://*.onrender.com" not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append("https://*.onrender.com")
 
 # --------------------------------------------------------------------------
 # Authentication transport (see README "Authentication").

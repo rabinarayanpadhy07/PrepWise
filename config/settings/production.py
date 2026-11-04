@@ -5,6 +5,8 @@ Startup fails with ImproperlyConfigured when a required value is missing or
 unsafe, so a misconfigured deployment never serves traffic.
 """
 
+import sys
+
 from django.core.exceptions import ImproperlyConfigured
 
 from .base import *  # noqa: F403
@@ -12,6 +14,8 @@ from .base import env
 
 INSECURE_KEY_PREFIX = "django-insecure"
 MIN_SECRET_KEY_LENGTH = 50
+
+is_collectstatic = "collectstatic" in sys.argv
 
 
 def _require(condition, message):
@@ -35,24 +39,27 @@ _require(
     all(origin.startswith("https://") for origin in CORS_ALLOWED_ORIGINS),  # noqa: F405
     "CORS_ALLOWED_ORIGINS must list explicit https:// origins in production.",
 )
-_require(
-    DATABASES["default"]["PASSWORD"],  # noqa: F405
-    "DB_PASSWORD is required in production.",
-)
+if not is_collectstatic:
+    _require(
+        DATABASES["default"]["PASSWORD"],  # noqa: F405
+        "DB_PASSWORD is required in production.",
+    )
 _require(AUTH_COOKIE["SECURE"], "AUTH_COOKIE_SECURE must be true in production.")  # noqa: F405
 
 
 # The OpenAI keys saved in the admin panel are encrypted with these keys.
-_require(
-    AI_SETTINGS["KEY_ENCRYPTION_KEYS"],  # noqa: F405
-    "AI_KEY_ENCRYPTION_KEYS is required in production (python manage.py generate_encryption_key).",
-)
+if not is_collectstatic:
+    _require(
+        AI_SETTINGS["KEY_ENCRYPTION_KEYS"],  # noqa: F405
+        "AI_KEY_ENCRYPTION_KEYS is required in production (python manage.py generate_encryption_key).",
+    )
 from apps.ai_services.keyring import KeyConfigError, parse_keys  # noqa: E402
 
-try:
-    parse_keys(AI_SETTINGS["KEY_ENCRYPTION_KEYS"])  # noqa: F405
-except KeyConfigError as exc:
-    raise ImproperlyConfigured(f"AI_KEY_ENCRYPTION_KEYS is invalid: {exc}") from None
+if AI_SETTINGS["KEY_ENCRYPTION_KEYS"]:  # noqa: F405
+    try:
+        parse_keys(AI_SETTINGS["KEY_ENCRYPTION_KEYS"])  # noqa: F405
+    except KeyConfigError as exc:
+        raise ImproperlyConfigured(f"AI_KEY_ENCRYPTION_KEYS is invalid: {exc}") from None
 
 # Payments are optional, but a configured gateway needs all of its secrets.
 if PAYMENT_SETTINGS["PROVIDER"]:  # noqa: F405

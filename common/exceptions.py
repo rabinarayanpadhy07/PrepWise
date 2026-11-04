@@ -94,12 +94,12 @@ def api_exception_handler(exc, context):
     response = drf_exception_handler(exc, context)
 
     if response is None:
-        # Unhandled exception: log it (redacted) and show the diagnostic detail.
+        # Unhandled exception: log it (redacted) and hide the details from the client.
         logger.exception("Unhandled API exception", exc_info=exc)
         return Response(
             error_payload(
                 "server_error",
-                f"An unexpected error occurred: {type(exc).__name__}: {str(exc)}",
+                GENERIC_MESSAGES[status.HTTP_500_INTERNAL_SERVER_ERROR],
                 request,
             ),
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,

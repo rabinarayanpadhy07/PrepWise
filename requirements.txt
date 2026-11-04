@@ -13,3 +13,4 @@ razorpay==2.0.1
 pypdf==6.21.2
 defusedxml==0.7.1
 fpdf2==2.8.9
+gunicorn==26.2.0

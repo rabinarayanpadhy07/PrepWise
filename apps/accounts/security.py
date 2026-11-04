@@ -35,9 +35,8 @@ def enforce_csrf(request):
     django_request = getattr(request, "_request", request)
     check = _CSRFCheck(lambda _request: None)
     check.process_request(django_request)
-    reason = check.process_view(django_request, None, (), {})
-    if reason:
-        raise CSRFFailed(detail=f"Security check failed: {reason}")
+    if check.process_view(django_request, None, (), {}):
+        raise CSRFFailed()
 
 
 def issue_tokens(user):
