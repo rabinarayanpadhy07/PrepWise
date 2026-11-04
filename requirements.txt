@@ -1,2 +1,15 @@
-# Production dependencies for deployment (Vercel)
--r requirements/base.txt
+Django==5.2.18
+djangorestframework==3.18.3
+djangorestframework-simplejwt==5.5.1
+drf-spectacular==0.30.0
+django-cors-headers==4.9.0
+django-environ==0.14.0
+psycopg[binary]==3.3.6
+whitenoise==6.12.0
+openai==3.29.0
+httpx==0.28.1
+cryptography==50.0.2
+razorpay==2.0.1
+pypdf==6.21.2
+defusedxml==0.7.1
+fpdf2==2.8.9

@@ -92,7 +92,7 @@ MIDDLEWARE.insert(  # noqa: F405
     "whitenoise.middleware.WhiteNoiseMiddleware",
 )
 STORAGES["staticfiles"] = {  # noqa: F405
-    "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
 }
 
 LOGGING["handlers"]["console"]["formatter"] = env.str("DJANGO_LOG_FORMAT", default="json")  # noqa: F405
