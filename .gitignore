@@ -1,0 +1,92 @@
+# =====================================================================
+# PrepWise Backend (Django / Python) - .gitignore
+# =====================================================================
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+*.env
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+credentials.json
+service-account*.json
+*-credentials.json
+secrets/
+.secrets/
+
+# Python / Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+.python-version
+
+# Django runtime files
+db.sqlite3
+db.sqlite3-journal
+media/
+uploads/
+staticfiles/
+static_root/
+celerybeat-schedule
+celerybeat.pid
+local_settings.py
+
+# Logs
+*.log
+logs/
+
+# Testing & Linting
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+nosetests.xml
+
+# Distribution / Packaging
+build/
+dist/
+wheels/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# IDE & Editor files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# Operating System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/

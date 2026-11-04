@@ -1,0 +1,2 @@
+# Production dependencies for deployment (Vercel)
+-r requirements/base.txt

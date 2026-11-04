@@ -1,0 +1,3 @@
+# Production server (Linux). Gunicorn does not run on Windows.
+-r base.txt
+gunicorn==26.2.0

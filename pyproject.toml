@@ -1,0 +1,28 @@
+[project]
+name = "prepwise-backend"
+version = "0.1.0"
+description = "PrepWise API (Django REST Framework)"
+requires-python = ">=3.12"
+
+[tool.vercel]
+entrypoint = "config.wsgi:application"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+python_files = ["test_*.py"]
+addopts = "--strict-markers --reuse-db"
+testpaths = ["common", "apps", "config"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["**/migrations/*"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "DJ", "S", "BLE"]
+ignore = ["S101"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/*" = ["S105", "S106", "S107"]
+"conftest.py" = ["S105"]
+"config/settings/*" = ["S105"]
